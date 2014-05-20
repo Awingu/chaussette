@@ -1,3 +1,9 @@
+# Apply Gevent monkey patch before using socket.
+# Fixes issues when running chaussette with gevent backend.
+# Not tested with other backends.
+from gevent import monkey
+monkey.patch_all()
+
 import sys
 import os
 import argparse

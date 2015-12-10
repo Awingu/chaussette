@@ -10,8 +10,11 @@ if (not hasattr(sys, 'version_info')
     raise SystemExit("Chaussette requires Python 2.6, 2.7, 3.3 or later.")
 
 PYPY = hasattr(sys, 'pypy_version_info')
+PY26 = (2, 6, 0, 'final') <= sys.version_info < (2, 7, 0, 'final')
 
 install_requires = ['six >= 1.3.0']
+if PY26:
+    install_requires.append('ordereddict')
 
 try:
     import argparse     # NOQA
@@ -33,13 +36,12 @@ if sys.version_info[0] == 2:
     tests_require += ['PasteDeploy', 'Paste', 'unittest2', 'ws4py']
     if not PYPY:
         tests_require += ['gevent', 'gevent-websocket', 'eventlet',
-                          'gevent-socketio']
-
+                          'gevent-socketio', 'bjoern']
 
 setup(name='chaussette',
       version=__version__,
       url='http://chaussette.readthedocs.org',
-      packages=find_packages(),
+      packages=find_packages(exclude=['examples', 'examples.simple_chat']),
       description=("A WSGI Server for Circus"),
       long_description=README,
       author="Mozilla Foundation & Contributors",

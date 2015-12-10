@@ -1,6 +1,14 @@
 import sys
 from chaussette.backend import _wsgiref
 
+# make sure OrderedDict is available in the collections package,
+# this is required for python 2.6
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
+    import collections
+    collections.OrderedDict = OrderedDict
 
 _backends = {'wsgiref': _wsgiref.ChaussetteServer}
 
@@ -76,3 +84,8 @@ def get(name):
 
 def backends():
     return sorted(_backends.keys())
+
+
+def is_gevent_backend(backend):
+    return backend in ('gevent', 'fastgevent', 'geventwebsocket',
+                       'geventws4py')
